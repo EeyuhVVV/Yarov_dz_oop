@@ -1,3 +1,4 @@
+#nullable disable
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -112,11 +113,9 @@ public partial class MainForm : Form
         if (string.IsNullOrEmpty(input))
             throw new ArgumentException("Поле ввода пустое.");
 
-        // Если строка состоит только из цифр — трактуем как десятичное число
         if (int.TryParse(input, out int dec))
             return new RomanNumber(dec);
 
-        // Иначе — как римское число
         return new RomanNumber(input);
     }
 
