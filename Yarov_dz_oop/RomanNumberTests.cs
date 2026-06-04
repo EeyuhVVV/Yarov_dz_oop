@@ -16,6 +16,8 @@ public static class RomanNumberTests
     /// </summary>
     public static void RunAll()
     {
+        _passed = 0;
+        _failed = 0;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.WriteLine("=== Тестирование класса RomanNumber ===\n");
 
@@ -173,24 +175,24 @@ public static class RomanNumberTests
         Console.WriteLine("--- Обработка исключений ---");
 
         // Выход за диапазон
-        AssertThrows<ArgumentOutOfRangeException>(() => new RomanNumber(0), "RomanNumber(0) → исключение");
-        AssertThrows<ArgumentOutOfRangeException>(() => new RomanNumber(-5), "RomanNumber(-5) → исключение");
-        AssertThrows<ArgumentOutOfRangeException>(() => new RomanNumber(4000), "RomanNumber(4000) → исключение");
+        AssertThrows<ArgumentOutOfRangeException>(() => { var _ = new RomanNumber(0); }, "RomanNumber(0) → исключение");
+        AssertThrows<ArgumentOutOfRangeException>(() => { var _ = new RomanNumber(-5); }, "RomanNumber(-5) → исключение");
+        AssertThrows<ArgumentOutOfRangeException>(() => { var _ = new RomanNumber(4000); }, "RomanNumber(4000) → исключение");
 
         // Пустая строка
-        AssertThrows<ArgumentNullException>(() => new RomanNumber(""), "RomanNumber(\"\") → исключение");
+        AssertThrows<ArgumentNullException>(() => { var _ = new RomanNumber(""); }, "RomanNumber(\"\") → исключение");
 
         // Недопустимый символ
-        AssertThrows<ArgumentException>(() => new RomanNumber("ABC"), "RomanNumber(\"ABC\") → исключение");
+        AssertThrows<ArgumentException>(() => { var _ = new RomanNumber("ABC"); }, "RomanNumber(\"ABC\") → исключение");
 
         // Вычитание с отрицательным результатом
-        AssertThrows<ArithmeticException>(() => new RomanNumber(5) - new RomanNumber(10), "V - X → исключение");
+        AssertThrows<ArithmeticException>(() => { var _ = new RomanNumber(5) - new RomanNumber(10); }, "V - X → исключение");
 
-        // Деление на ноль (невозможно в римской системе, но проверяем)
-        AssertThrows<ArithmeticException>(() => new RomanNumber(10) / new RomanNumber(20), "X / XX = 0 → исключение");
+        // Деление с нулевым результатом
+        AssertThrows<ArithmeticException>(() => { var _ = new RomanNumber(10) / new RomanNumber(20); }, "X / XX = 0 → исключение");
 
         // Результат умножения > 3999
-        AssertThrows<ArgumentOutOfRangeException>(() => new RomanNumber(2000) * new RomanNumber(3), "MM × III → исключение (>3999)");
+        AssertThrows<ArgumentOutOfRangeException>(() => { var _ = new RomanNumber(2000) * new RomanNumber(3); }, "MM × III → исключение (>3999)");
 
         Console.WriteLine();
     }
@@ -216,7 +218,7 @@ public static class RomanNumberTests
         }
         else
         {
-            Console.WriteLine($"  \u274c {testName} \u2014 \u043e\u0436\u0438\u0434\u0430\u043b\u043e\u0441\u044c: {expected}, \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u043e: {actual}");
+            Console.WriteLine($"  \u274c {testName} \u2014 ожидалось: {expected}, получено: {actual}");
             _failed++;
         }
     }
@@ -230,7 +232,7 @@ public static class RomanNumberTests
         }
         else
         {
-            Console.WriteLine($"  \u274c {testName} \u2014 \u0443\u0441\u043b\u043e\u0432\u0438\u0435 \u043b\u043e\u0436\u043d\u043e");
+            Console.WriteLine($"  \u274c {testName} \u2014 условие ложно");
             _failed++;
         }
     }
@@ -240,7 +242,7 @@ public static class RomanNumberTests
         try
         {
             action();
-            Console.WriteLine($"  \u274c {testName} \u2014 \u0438\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u041d\u0415 \u0432\u044b\u0431\u0440\u043e\u0448\u0435\u043d\u043e");
+            Console.WriteLine($"  \u274c {testName} \u2014 исключение НЕ выброшено");
             _failed++;
         }
         catch (TException)
@@ -250,7 +252,7 @@ public static class RomanNumberTests
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"  \u274c {testName} \u2014 \u043e\u0436\u0438\u0434\u0430\u043b\u043e\u0441\u044c {typeof(TException).Name}, \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u043e {ex.GetType().Name}: {ex.Message}");
+            Console.WriteLine($"  \u274c {testName} \u2014 ожидалось {typeof(TException).Name}, получено {ex.GetType().Name}: {ex.Message}");
             _failed++;
         }
     }
